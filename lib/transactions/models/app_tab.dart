@@ -1,0 +1,1 @@
+enum AppTab { transactions, stats }

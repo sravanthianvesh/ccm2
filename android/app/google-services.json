@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "157585809446",
+    "firebase_url": "https://construction-cost-manager06.firebaseio.com",
+    "project_id": "construction-cost-manager06",
+    "storage_bucket": "construction-cost-manager06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157585809446:android:b2ee8b3845cb97df1d06e7",
+        "android_client_info": {
+          "package_name": "com.thegeekconsole.ccm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "157585809446-5kuuol6e255qonl5tul623ab7o29mn5u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thegeekconsole.ccm",
+            "certificate_hash": "7c49824b44126cbad7f4c45c34e51b2f3047d27a"
+          }
+        },
+        {
+          "client_id": "157585809446-pd204e69k92bhvkigcohquuuirsntrvo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChW8uecTeApRcDzlk1BKrz33pock2sORU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "157585809446-pd204e69k92bhvkigcohquuuirsntrvo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
