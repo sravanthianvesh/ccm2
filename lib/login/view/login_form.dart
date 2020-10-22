@@ -25,8 +25,7 @@ class LoginForm extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                'assets/bloc_logo_small.png',
-                height: 120,
+                'assets/logo/2.0x/ic_launcher.png',
               ),
               const SizedBox(height: 16.0),
               _EmailInput(),

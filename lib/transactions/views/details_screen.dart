@@ -19,11 +19,11 @@ class DetailsScreen extends StatelessWidget {
             .firstWhere((transaction) => transaction.id == id, orElse: () => null);
         return Scaffold(
           appBar: AppBar(
-            title: Text(transaction?.category ?? 'Transaction Details'),
+            title: Text('Transaction Details'),
             actions: [
               transaction.incompletePayment ?
               IconButton(
-                tooltip: 'Mrk Paid',
+                tooltip: 'Clear Dues/Advances',
                 icon: Icon(Icons.check_box),
                 onPressed: () {
                   BlocProvider.of<TransactionsBloc>(context).add(UpdateTransaction(transaction.copyWith(amountPaid: transaction.totalAmount, incompletePayment: false)));
@@ -47,180 +47,204 @@ class DetailsScreen extends StatelessWidget {
               )
             ],
           ),
-          body: transaction == null
-              ? Container()
-              : Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: ListView(
+          body: Column(
+            children: [
+              Card(
+                margin: EdgeInsets.all(12.0),
+                elevation: 8.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Card(
-                            child: Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(
-                                    Icons.calendar_today,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                  const SizedBox(width: 8.0,),
-                                  Text(
-                                    transaction.date,
-                                    style:
-                                    Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                ]
-                              ),
-                              decoration: BoxDecoration(
-                                border: Border.all(width: 0.5, color: Colors.grey),
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 8.0,),
-
-                          Card(
-                            child: Container(
-
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(
-                                      Icons.description,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    const SizedBox(width: 8.0,),
-                                    Text(
-                                      transaction.description,
-                                      style:
-                                      Theme.of(context).textTheme.bodyText1,
-                                    ),
-                                  ]
-                              ),
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: 0.5, color: Colors.grey),
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 8.0,),
-
-                          Card(
-                            child: Container(
-
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(
-                                      Icons.view_list,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    const SizedBox(width: 8.0,),
-                                    Text(
-                                      transaction.quantity,
-                                      style:
-                                      Theme.of(context).textTheme.bodyText1,
-                                    ),
-                                  ]
-                              ),
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: 0.5, color: Colors.grey),
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 8.0,),
-
-                          Card(
-                            child: Container(
-
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(
-                                      Icons.attach_money,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    const SizedBox(width: 8.0,),
-                                    Text(
-                                      transaction.totalAmount.toStringAsFixed(2),
-                                      style: GoogleFonts.openSans(
-                                        textStyle: Theme.of(context).textTheme.bodyText1,
-                                        color: const Color(0xFF33691E),
-                                      ),
-                                    ),
-                                  ]
-                              ),
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: 0.5, color: Colors.grey),
-
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 8.0,),
-                          transaction.incompletePayment ?
-                          Card(
-                            child: Container(
-
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(
-                                      Icons.money_off,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    const SizedBox(width: 8.0,),
-                                    Text(
-                                      transaction.amountPaid.toStringAsFixed(2),
-                                      style: GoogleFonts.openSans(
-                                        textStyle: Theme.of(context).textTheme.bodyText1,
-                                        color: const Color(0xFFFF7043),
-                                      ),
-                                    ),
-                                  ]
-                              ),
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: 0.5, color: Colors.grey),
-                              ),
-                            ),
-                          ) :
-                          transaction.amountPaid > transaction.totalAmount ?
-                          Card(
-                            child: Container(
-
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(
-                                      Icons.account_balance_wallet,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    const SizedBox(width: 8.0,),
-                                    Text(
-                                      transaction.amountPaid.toStringAsFixed(2),
-                                      style: GoogleFonts.openSans(
-                                        textStyle: Theme.of(context).textTheme.bodyText1,
-                                        color: const Color(0xFFFFB74D),
-                                      ),
-                                    ),
-                                  ]
-                              ),
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: .5, color: Colors.grey),
-
-                              ),
-                            ),
-                          ) :
-
-                          Container(),
-                        ],
+                      Text(
+                        'Date:',
+                        style:
+                        Theme.of(context).textTheme.subtitle1,
                       ),
+
+                      const SizedBox(height: 8.0,),
+
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.calendar_today,
+                              color: Colors.blue[900],
+                            ),
+                            const SizedBox(width: 8.0,),
+                            Text(
+                              transaction.date,
+                              style:
+                              Theme.of(context).textTheme.subtitle1,
+                            ),
+                          ]
+                        ),
+                      ),
+
+                      const SizedBox(height: 16.0,),
+
+                      Text(
+                        'Category:',
+                        style:
+                        Theme.of(context).textTheme.subtitle1,
+                      ),
+                      const SizedBox(height: 8.0,),
+                      Padding(
+                        padding: const EdgeInsets.only(left:8.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.category,
+                                color: Colors.blue[900],
+                              ),
+                              const SizedBox(width: 8.0,),
+                              Text(
+                                transaction.category,
+                                style:
+                                Theme.of(context).textTheme.subtitle1,
+                                maxLines: 5,
+                              ),
+                            ]
+                        ),
+                      ),
+
+                      const SizedBox(height: 8.0,),
+
+                      Text(
+                        'Description:',
+                        style:
+                        Theme.of(context).textTheme.subtitle1,
+                      ),
+                      const SizedBox(height: 8.0,),
+                      Padding(
+                        padding: const EdgeInsets.only(left:8.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.description,
+                                color: Colors.blue[900],
+                              ),
+                              const SizedBox(width: 8.0,),
+                              Text(
+                                transaction.description,
+                                style:
+                                Theme.of(context).textTheme.subtitle1,
+                                maxLines: 5,
+                              ),
+                            ]
+                        ),
+                      ),
+
+                      const SizedBox(height: 8.0,),
+
+                      Text(
+                        'Quantity:',
+                        style:
+                        Theme.of(context).textTheme.subtitle1,
+                      ),
+                      const SizedBox(height: 8.0,),
+                      Padding(
+                        padding: const EdgeInsets.only(left:8.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.view_list,
+                                color: Colors.blue[900],
+                              ),
+                              const SizedBox(width: 8.0,),
+                              Text(
+                                transaction.quantity,
+                                style:
+                                Theme.of(context).textTheme.subtitle1,
+                              ),
+                            ]
+                        ),
+                      ),
+
+                      const SizedBox(height: 8.0,),
+
+                      Text(
+                        'Billed Amount:',
+                        style:
+                        Theme.of(context).textTheme.subtitle1,
+                      ),
+                      const SizedBox(height: 8.0,),
+                      Padding(
+                        padding: const EdgeInsets.only(left:8.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.attach_money,
+                                color: Colors.blue[900],
+                              ),
+                              const SizedBox(width: 8.0,),
+                              Text(
+                                transaction.totalAmount.toStringAsFixed(2),
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
+                            ]
+                        ),
+                      ),
+
+                      const SizedBox(height: 16.0,),
+
+                      transaction.amountPaid != transaction.totalAmount ?
+                      Text(
+                        transaction.incompletePayment ? 'Due:' : 'Advance:',
+                        style:
+                        Theme.of(context).textTheme.subtitle1,
+                      ) :
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.check_circle_rounded,
+                              color: Colors.blue[900],
+                            ),
+                            const SizedBox(width: 8.0,),
+                            Text(
+                              'Paid',
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                          ]
+                      ),
+
+                      const SizedBox(height: 8.0,),
+                      transaction.amountPaid != transaction.totalAmount ?
+                      Padding(
+                        padding: const EdgeInsets.only(left:8.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(
+                                transaction.incompletePayment ? Icons.money_off : Icons.attach_money,
+                                color: Colors.blue[900],
+                              ),
+                              const SizedBox(width: 8.0,),
+                              Text(
+                                transaction.amountPaid.toStringAsFixed(2),
+                                style: GoogleFonts.openSans(
+                                  textStyle: Theme.of(context).textTheme.subtitle1,
+                                  color: transaction.incompletePayment ? Colors.red : Colors.green[600],
+                                ),
+                              ),
+                            ]
+                        ),
+                      ) :
+                      Container(),
                     ],
                   ),
                 ),
+              ),
+            ],
+          ),
           floatingActionButton: FloatingActionButton(
             tooltip: 'Edit Transaction',
             child: Icon(Icons.edit),

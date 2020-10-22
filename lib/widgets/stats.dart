@@ -1,4 +1,3 @@
-import 'package:ccm/transactions/bloc/transactions.dart';
 import 'package:ccm/transactions/models/chart_data_sets.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -7,17 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ccm/transactions/bloc/stats.dart';
 import 'package:ccm/widgets/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Stats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<StatsBloc, StatsState>(
       builder: (context, state) {
-        var transState = BlocProvider.of<TransactionsBloc>(context).state;
-          if (transState is TransactionsLoaded) {
-            BlocProvider.of<StatsBloc>(context).add(UpdateStats(transState.transactions));
-          }
-
         if (state is StatsLoading) {
           return LoadingIndicator();
         } else if (state is StatsLoaded) {
@@ -26,7 +21,7 @@ class Stats extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
+                  /*Padding(
                     padding: EdgeInsets.only(bottom: 8.0),
                     child: Text(
                       'Billed:',
@@ -112,11 +107,60 @@ class Stats extends StatelessWidget {
                         color: Colors.green,
                       ),
                     ),
+                  ),*/
+
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.blur_linear_sharp,
+                          color: Colors.blue[900],
+                        ),
+                        SizedBox(width: 8.0,),
+                        Text(
+                          'Overview',
+                          style: GoogleFonts.openSans(
+                            textStyle: Theme.of(context).textTheme.headline5,
+                            color: Colors.blue[900],
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width*0.9,
+                      height: MediaQuery.of(context).size.height/2.1,
+                      child: SFCategory(
+                        state.sFChartData,)
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.category,
+                          color: Colors.blue[900],
+                        ),
+                        SizedBox(width: 8.0,),
+                        Text(
+                          'Expenditure by Category',
+                          style: GoogleFonts.openSans(
+                            textStyle: Theme.of(context).textTheme.headline5,
+                            color: Colors.blue[900],
+                          ),
+                        ),
+
+                      ],
+                    ),
                   ),
 
                   SizedBox(
                       width: MediaQuery.of(context).size.width*0.8,
-                      height: MediaQuery.of(context).size.height/3,
+                      height: MediaQuery.of(context).size.height/2.1,
                       child: DatumLegendWithMeasures(
                         _createData(state.chartData),
                         animate: false,)
@@ -134,12 +178,24 @@ class Stats extends StatelessWidget {
   static List<charts.Series<LinearExpenditure, String>> _createData( var data ) {
     return [
       new charts.Series<LinearExpenditure, String>(
-        id: 'Sales',
+        id: 'Category',
         domainFn: (LinearExpenditure expense, _) => expense.category,
         measureFn: (LinearExpenditure expense, _) => expense.expenditure,
         data: data,
         // Set a label accessor to control the text of the arc label.
         labelAccessorFn: (LinearExpenditure row, _) => '${row.category}: ${row.expenditure}',
+      )
+    ];
+  }
+
+  static List<charts.Series<OrdinalStats, String>> _createOrdinalData(var data) {
+    return [
+      new charts.Series<OrdinalStats, String>(
+        id: 'Head',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (OrdinalStats head, _) => head.head,
+        measureFn: (OrdinalStats head, _) => head.amount,
+        data: data,
       )
     ];
   }
@@ -181,10 +237,58 @@ class DatumLegendWithMeasures extends StatelessWidget {
           showMeasures: true,
           legendDefaultMeasure: charts.LegendDefaultMeasure.firstValue,
           measureFormatter: (num value) {
-            return value == null ? '-' : '${value}k';
+            return value == null ? '-' : '$value';
           },
         ),
       ],
     );
   }
+}
+
+class InitialSelection extends StatelessWidget {
+  final List<charts.Series> seriesList;
+  final bool animate;
+
+  InitialSelection(this.seriesList, {this.animate});
+
+  @override
+  Widget build(BuildContext context) {
+    return new charts.BarChart(
+      seriesList,
+      animate: animate,
+      behaviors: [
+        new charts.InitialSelection(selectedDataConfig: [
+          new charts.SeriesDatumConfig<String>('Head', 'Billed')
+        ])
+      ],
+    );
+  }
+
+}
+
+class SFCategory extends StatelessWidget {
+  final List<SFChartData> seriesData;
+
+  SFCategory(this.seriesData);
+
+  @override
+  Widget build(BuildContext context) {
+
+    return new SfCartesianChart(
+      // Initialize category axis
+        primaryXAxis: CategoryAxis(),
+
+        series: <ColumnSeries<SFChartData, String>>[
+          ColumnSeries<SFChartData, String>(
+            // Bind data source
+              dataSource:  seriesData,
+              xValueMapper: (SFChartData data, _) => data.x,
+              yValueMapper: (SFChartData data, _) => data.yValue,
+            pointColorMapper: (SFChartData data, _) => data.pointColor,
+            dataLabelSettings: DataLabelSettings(isVisible: true),
+          )
+        ]
+    );
+  }
+
 }

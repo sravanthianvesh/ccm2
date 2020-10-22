@@ -71,7 +71,7 @@ class AddEditForm extends StatelessWidget {
               const SizedBox(height: 8.0),
               _CategoryInput(transaction?.category?? null),
               const SizedBox(height: 8.0),
-              _DescriptionInput(transaction?.description?? null),
+              _DescriptionInput(transaction?.description?? ''),
               const SizedBox(height: 8.0),
               _QuantityInput(transaction?.quantity?? null),
               const SizedBox(height: 8.0),
@@ -205,8 +205,9 @@ class _DescriptionInput extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           key: const Key('addEditForm_descriptionInput_textField'),
-          onChanged: (description) =>
-              context.bloc<TransactionCubit>().descriptionChanged(description),
+          onChanged: (description) {
+            description != '' ? context.bloc<TransactionCubit>().descriptionChanged(description) : null;
+          },
           keyboardType: TextInputType.text,
           initialValue: init ?? '',
           decoration: InputDecoration(

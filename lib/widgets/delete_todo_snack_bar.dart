@@ -20,3 +20,23 @@ class DeleteTransactionSnackBar extends SnackBar {
           ),
         );
 }
+
+class CompleteTransactionSnackBar extends SnackBar {
+  CompleteTransactionSnackBar({
+    Key key,
+    @required Transaction transaction,
+    @required VoidCallback onUndo,
+  }) : super(
+    key: key,
+    content: Text(
+      'Cleared Dues/Advances ${transaction.category} - ${transaction.description}',
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+    ),
+    duration: Duration(seconds: 2),
+    action: SnackBarAction(
+      label: 'Undo',
+      onPressed: onUndo,
+    ),
+  );
+}
